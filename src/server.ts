@@ -1,8 +1,7 @@
 import express, { Application } from "express";
 import { dbConnection } from "./db/conection";
 import clienteRoute from "./routes/cliente.route";
-import { Request } from "express";
-import { Response } from "express";
+
 
 class Server{
 private app: Application;
@@ -35,4 +34,6 @@ routes():void{
         });
     }
 }
-export default Server;
+export default Server; 
+
+

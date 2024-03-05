@@ -7,26 +7,36 @@ const ClienteSchema = new Schema({
     },
     direccion:{
         type: String,
-        require: false
+        require: true,
     },
     telefono:{
         type: Number,
-        require:false
+        require:true,
+    },
+    tipoDocumento:{
+        type: String,
+        require: true,
+    },
+    numeroDocumento: {
+        type: String,
+        require: true,
     },
     email:{
-
+        type: String,
+        require:true,
     },
     estado:{
         type: Boolean,
         require:true,
         default: true
     },
-    createDate:{
-        type:Date.now(),
+    createdAt:{
+        type:Date,
+        default: Date.now()
     },
     updatedAt:{
         type: Date,
-        default: Date.now(),
+        default: Date.now()
     }
 
 });

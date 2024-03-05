@@ -8,24 +8,36 @@ const ClienteSchema = new mongoose_1.Schema({
     },
     direccion: {
         type: String,
-        require: false
+        require: true,
     },
     telefono: {
         type: Number,
-        require: false
+        require: true,
     },
-    email: {},
+    tipoDocumento: {
+        type: String,
+        require: true,
+    },
+    numeroDocumento: {
+        type: String,
+        require: true,
+    },
+    email: {
+        type: String,
+        require: true,
+    },
     estado: {
         type: Boolean,
         require: true,
         default: true
     },
-    createDate: {
-        type: Date.now(),
+    createdAt: {
+        type: Date,
+        default: Date.now()
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now()
     }
 });
 const ClienteModel = (0, mongoose_1.model)("Cliente", ClienteSchema);
