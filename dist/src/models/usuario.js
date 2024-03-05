@@ -28,6 +28,7 @@ const UsuarioSchema = new mongoose_1.Schema({
     rol: {
         type: Boolean,
         require: true,
+        default: "admin"
     },
     email: {
         type: String,

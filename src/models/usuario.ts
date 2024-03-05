@@ -28,6 +28,7 @@ const UsuarioSchema = new Schema({
     rol:{
         type: Boolean,
         require: true,
+        default: "admin"
     },
     email:{
         type: String,

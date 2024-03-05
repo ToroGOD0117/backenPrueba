@@ -41,7 +41,7 @@ const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     catch (error) {
         res.status(400).json({
             ok: false,
-            error: "error al crear el usuario"
+            error: "error al crear el usuo"
         });
     }
 });

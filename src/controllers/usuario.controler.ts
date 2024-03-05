@@ -35,8 +35,8 @@ export const crearUsuario = async (req: Request, res: Response)=>{
     } catch (error) {
         res.status(400).json({
         ok: false,
-        error: "error al crear el usuario"
+        error: "error al crear el usuo"
             
-    })
+    });
     }
 }
