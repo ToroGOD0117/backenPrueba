@@ -15,15 +15,15 @@ const UsuarioSchema = new Schema({
         require: true,
         unique: true
     },
-    login: {
-        type: String,
-        require: true,
-        unique: true
+    login:{
+        type:String,
+        require:true,
+        unique:true
     },
-    pass: {
-        type: String,
-        require: true,
-        unique: true
+    password:{
+        type:String,
+        require:true,
+        unique:true
     },
     rol:{
         type: Boolean,
