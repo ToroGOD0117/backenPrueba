@@ -23,14 +23,19 @@ const UsuarioSchema = new mongoose_1.Schema({
     password: {
         type: String,
         require: true,
-        unique: true
+        // unique:true
     },
     rol: {
-        type: Boolean,
+        type: String,
         require: true,
         default: "admin"
     },
     email: {
+        type: String,
+        require: true,
+        unique: true
+    },
+    telefono: {
         type: String,
         require: true,
         unique: true

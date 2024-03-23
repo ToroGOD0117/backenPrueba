@@ -23,10 +23,10 @@ const UsuarioSchema = new Schema({
     password:{
         type:String,
         require:true,
-        unique:true
+        // unique:true
     },
     rol:{
-        type: Boolean,
+        type: String,
         require: true,
         default: "admin"
     },
@@ -34,6 +34,11 @@ const UsuarioSchema = new Schema({
         type: String,
         require:true,
         unique:true
+    },
+    telefono:{
+        type: String,
+        require: true,
+        unique: true
     },
     estado:{
         type: Boolean,

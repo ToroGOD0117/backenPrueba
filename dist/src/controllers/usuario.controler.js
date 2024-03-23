@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.crearUsuario = void 0;
+exports.actEstadoF = exports.updateUsuario = exports.getUnUsuario = exports.crearUsuario = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,15 +35,150 @@ const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const usuarioCreado = yield nuevoUsuario.save();
         res.status(200).json({
             ok: true,
-            msg: "usuario creado"
+            msg: "usuario creado",
+            usuarioCreado
+        });
+    }
+    catch (error) {
+        console.error("Error al crear el usuario:", error);
+        res.status(400).json({
+            ok: false,
+            error: "Error al crear el usuario",
+        });
+    }
+});
+exports.crearUsuario = crearUsuario;
+const getUnUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const numeroDocumento = req.params.numeroDocumento;
+        //el busca todos los clientes
+        const usuarios = yield usuario_1.default.findOne({ numeroDocumento: numeroDocumento });
+        console.log(numeroDocumento);
+        res.json({
+            ok: true,
+            clientes: usuarios,
         });
     }
     catch (error) {
         res.status(400).json({
             ok: false,
-            error: "error al crear el usuo"
+            msg: `error al consultar el cliente ${error}`
         });
     }
 });
-exports.crearUsuario = crearUsuario;
+exports.getUnUsuario = getUnUsuario;
+const updateUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const numeroDocumento = req.params.numeroDocumento;
+        const { body } = req;
+        const usuarioActualizado = yield usuario_1.default.findByIdAndUpdate(numeroDocumento, body, { new: true });
+        res.json({
+            ok: true,
+            usuarios: usuarioActualizado,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            ok: false,
+            msg: "error al actualizar"
+        });
+    }
+});
+exports.updateUsuario = updateUsuario;
+const actEstadoF = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const numeroDocumento = req.params.numeroDocumento;
+        const { body } = req;
+        const estadoF = yield usuario_1.default.findOneAndUpdate({ numeroDocumento: numeroDocumento }, { estado: false }, { new: true });
+        res.json({
+            ok: true,
+            estado: estadoF,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            ok: false,
+            msg: "error al actualizar el estado"
+        });
+    }
+});
+exports.actEstadoF = actEstadoF;
+// export const  actualizarEstadoF = async (req: Request, res: Response)=>{
+//     try{
+//         const id = req.params.id;
+//         const {body}= req;
+//         const estadoActualizado = await ClienteModel.findByIdAndUpdate(id, {estado:false}, {new: true});
+//         res.json({
+//             ok: true,
+//             clientes: estadoActualizado
+//         })
+//     }catch(error){
+//         res.status(400).json({
+//             ok:false,
+//             msg: "error al actualizar el estado" 
+//             });
+//     }
+// }
+// export const getClientes = async (req: Request, res: Response)=>{
+// try{
+//     //el busca todos los clientes
+//     const clientes = await ClienteModel.find();
+//     res.json({
+//         ok: true,
+//         clientes,
+//     }); 
+// }catch(error){
+//     res.status(400).json({
+//         ok:false,
+//         msg: `error al consultar clientes cliente ${error}`
+//     });
+// }
+// };
+// export const updateCliente =async (req: Request, res: Response)=>{
+// try{
+// const id = req.params.id;
+// const {body} = req; 
+// const clienteActualizado = await ClienteModel.findByIdAndUpdate(id, body, {new: true});
+// res.json({
+//     ok:true,
+//     clientes:clienteActualizado,
+// })
+// }catch(error){
+//     res.status(400).json({
+//     ok:false,
+//     msg: "error al actualizar"
+//     });
+// }
+// };
+// export const deleteCliente = async (req: Request, res: Response)=>{
+//     try{
+//         const id = req.params.id;
+//         const clienteEliminado = await ClienteModel.findByIdAndDelete(id);
+//         res.json({
+//             ok: true,
+//             clientes:clienteEliminado
+//         })
+//     }catch(error){
+//         res.status(400).json({
+//         ok:false,
+//         msg: "error al eliminar el cliente" 
+//         });
+//     }
+// }
+// export const  actualizarEstadoF = async (req: Request, res: Response)=>{
+//     try{
+//         const id = req.params.id;
+//         const {body}= req;
+//         const estadoActualizado = await ClienteModel.findByIdAndUpdate(id, {estado:false}, {new: true});
+//         res.json({
+//             ok: true,
+//             clientes: estadoActualizado
+//         })
+//     }catch(error){
+//         res.status(400).json({
+//             ok:false,
+//             msg: "error al actualizar el estado" 
+//             });
+//     }
+// }
 //# sourceMappingURL=usuario.controler.js.map

@@ -13,3 +13,6 @@ export const validateFields = (req: Request, res: Response, next: NextFunction)=
     next()
      
 } 
+export interface CustomRequest extends Request {
+    _id: string;
+}
