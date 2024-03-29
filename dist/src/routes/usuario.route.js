@@ -15,9 +15,8 @@ router.post("/", validate_jwt_1.default, [
     (0, express_validator_1.check)("email", "el email es obligatorio").not().isEmpty().isEmail(),
     validate_fields_1.validateFields
 ], usuario_controler_1.crearUsuario);
+router.post("/mascotas/:numeroDocumento", usuario_controler_1.agregarMascota);
 router.get("/:numeroDocumento", usuario_controler_1.getUnUsuario);
-// router.get("/", validateJWT, getClientes);
-// router.get("/:id",validateJWT,getUnCliente);
 router.put("/:numeroDocumentos", validate_jwt_1.default, usuario_controler_1.updateUsuario);
 // router.delete("/:id",validateJWT,deleteCliente);
 router.put("/estadoF/:numeroDocumento", usuario_controler_1.actEstadoF);

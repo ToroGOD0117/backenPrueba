@@ -1,6 +1,32 @@
-import { Model, Schema, model } from "mongoose";
+import { Document, Types, Model, Schema, model } from "mongoose";
 
-const UsuarioSchema = new Schema({
+export interface IMascota extends Document{
+    nombre: string;
+    especie: String;
+    raza: string;
+}
+
+interface IUsuario extends Document{
+    nombre : string;
+    tipoDocumento: string;
+    numeroDocumento: string;
+    login: string;
+    password: string;
+    rol: String;
+    email: string;
+    telefono: string;
+    estado: boolean;
+    createdAt: Date;
+    mascotas: IMascota[];
+}
+const mascotaSchema = new Schema<IMascota>({
+    nombre:{type:String, required: true},
+    especie:{type: String, required: true},
+    raza:{type:String, required: true},
+
+
+});
+const UsuarioSchema = new Schema<IUsuario>({
     nombre:{
         type:String,
         require: true
@@ -48,10 +74,11 @@ const UsuarioSchema = new Schema({
     createdAt:{
         type:Date,
         default: Date.now()
-    }
+    },
+    mascotas: [mascotaSchema]
+    
 
 });
 
-const UsuarioModel: Model <any> = model ("usuario", UsuarioSchema);
-
+const UsuarioModel: Model<IUsuario> = model<IUsuario>("usuario", UsuarioSchema);
 export default UsuarioModel;

@@ -1,7 +1,45 @@
 import { Request, Response } from "express";
 import UsuarioModel from "../models/usuario";
+import { IMascota } from "../models/usuario";
 import bcrypt from  "bcryptjs" 
 
+
+
+// Crear mascota
+export const agregarMascota = async (req: Request, res: Response) => {
+    const { numeroDocumento } = req.params;
+    const { body } = req;
+
+    try {
+        // Buscar al usuario por su número de documento
+        const usuario = await UsuarioModel.findOne({ numeroDocumento });
+        
+        if (!usuario) {
+            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        }
+
+        // Generar un número de documento único para la nueva mascota
+        const numeroDocumentoMascota = `${numeroDocumento}-${usuario.mascotas.length + 1}`;
+
+        // Crear la nueva mascota
+        const nuevaMascota : IMascota = {
+           ...body,
+           numeroDocumentoMascota: numeroDocumentoMascota,
+           
+        };
+
+        usuario.mascotas.push(nuevaMascota);
+        await usuario.save();
+
+        res.status(201).json({ ok: true, msg: 'Mascota creada correctamente', mascota: nuevaMascota });
+    } catch (error) {
+        console.error('Error al agregar la mascota:', error);
+        res.status(500).json({ ok: false, msg: 'Error al agregar la mascota' });
+    }
+};
+
+
+//crear usuario
 export const crearUsuario = async (req: Request, res: Response)=>{
         const {body} = req;
         //el login puede cambiarse como username, email o numero de documento 

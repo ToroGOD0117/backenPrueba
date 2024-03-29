@@ -1,6 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+const mascotaSchema = new mongoose_1.Schema({
+    nombre: { type: String, required: true },
+    especie: { type: String, required: true },
+    raza: { type: String, required: true },
+});
 const UsuarioSchema = new mongoose_1.Schema({
     nombre: {
         type: String,
@@ -48,7 +53,8 @@ const UsuarioSchema = new mongoose_1.Schema({
     createdAt: {
         type: Date,
         default: Date.now()
-    }
+    },
+    mascotas: [mascotaSchema]
 });
 const UsuarioModel = (0, mongoose_1.model)("usuario", UsuarioSchema);
 exports.default = UsuarioModel;

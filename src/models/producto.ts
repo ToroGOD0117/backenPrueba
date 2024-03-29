@@ -54,7 +54,7 @@ const ProductoSchema = new Schema<IProducto>({
     caracteristicas: { type: Object, required: true },
     distribuidor:{ type: Object, required: true},
     programas: {types: Object},
-    usuario : {type: Schema.Types.ObjectId, ref:"usuario", required: true}
+    // usuario : {type: Schema.Types.ObjectId, ref:"usuario", required: true}
     
 
 });

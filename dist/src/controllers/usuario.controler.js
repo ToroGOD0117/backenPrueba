@@ -12,9 +12,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.actEstadoF = exports.updateUsuario = exports.getUnUsuario = exports.crearUsuario = void 0;
+exports.actEstadoF = exports.updateUsuario = exports.getUnUsuario = exports.crearUsuario = exports.agregarMascota = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+// Crear mascota
+const agregarMascota = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { numeroDocumento } = req.params;
+    const { body } = req;
+    try {
+        // Buscar al usuario por su número de documento
+        const usuario = yield usuario_1.default.findOne({ numeroDocumento });
+        if (!usuario) {
+            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        }
+        // Generar un número de documento único para la nueva mascota
+        const numeroDocumentoMascota = `${numeroDocumento}-${usuario.mascotas.length + 1}`;
+        // Crear la nueva mascota
+        const nuevaMascota = Object.assign(Object.assign({}, body), { numeroDocumentoMascota: numeroDocumentoMascota });
+        usuario.mascotas.push(nuevaMascota);
+        yield usuario.save();
+        res.status(201).json({ ok: true, msg: 'Mascota creada correctamente', mascota: nuevaMascota });
+    }
+    catch (error) {
+        console.error('Error al agregar la mascota:', error);
+        res.status(500).json({ ok: false, msg: 'Error al agregar la mascota' });
+    }
+});
+exports.agregarMascota = agregarMascota;
+//crear usuario
 const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     //el login puede cambiarse como username, email o numero de documento 
