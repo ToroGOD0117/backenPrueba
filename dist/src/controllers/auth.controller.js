@@ -36,7 +36,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         //genrar token 
-        const token = yield (0, jwt_1.default)(usuario._id, usuario.login);
+        const token = yield (0, jwt_1.default)(usuario.id, usuario.login);
         res.status(200).json({
             ok: true,
             usuario: usuario,
@@ -53,6 +53,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     ;
 });
 exports.login = login;
+//renovar token
 const renewToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req._id;
     if (typeof id === "undefined") {
@@ -72,7 +73,7 @@ const renewToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         console.error(error);
         res.status(401).json({
             ok: false,
-            msg: "hable con el administrador",
+            msg: "hable con el ",
         });
     }
 });

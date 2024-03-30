@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import { dbConnection } from "./db/conection";
 import usuarioRoutes from "./routes/usuario.route";
 import authRoutes from "./routes/auth.route";
+import mascotaRoutes from "./routes/mascota.route"
 
 
 class Server{
@@ -11,6 +12,7 @@ private apiPaths={
 
     usuario: "/api/v1/usuarios",
     auth: "/api/v1/auth",
+    mascota: "/api/v1/mascotas"
 }
 
     constructor(){
@@ -31,6 +33,7 @@ middelwares(){
 routes():void{
     this.app.use(this.apiPaths.usuario, usuarioRoutes);
     this.app.use(this.apiPaths.auth, authRoutes);
+    this.app.use(this.apiPaths.mascota, mascotaRoutes);
 }
     listen():void{
         this.app.listen(this.port, ()=>{

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import UsuarioModel from "../models/usuario";
 import bcrypt from  "bcryptjs" 
 import generarJWT from "../helpers/jwt";
-import { CustomRequest } from "../middleware/validate-fields";
+import { CustomRequest } from "../middleware/validate-jwt";
 
 export const login = async (req: Request, res: Response)=> {
 
@@ -28,7 +28,7 @@ if (!validarPassword){
     })
 }
 //genrar token 
-const token = await generarJWT(usuario._id, usuario.login);
+const token = await generarJWT(usuario.id, usuario.login);
 
 res.status(200).json({
     ok:true,
@@ -44,6 +44,7 @@ res.status(200).json({
     };
 
 }
+//renovar token
 export const renewToken = async (req: CustomRequest, res: Response) => {
     const id = req._id;
     
@@ -66,7 +67,7 @@ export const renewToken = async (req: CustomRequest, res: Response) => {
       console.error(error);
       res.status(401).json({
         ok: false,
-        msg: "hable con el administrador",
+        msg: "hable con el ",
       });
     }
   };

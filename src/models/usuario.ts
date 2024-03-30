@@ -1,12 +1,22 @@
 import { Document, Types, Model, Schema, model } from "mongoose";
 
-export interface IMascota extends Document{
+interface IObservaciones{
+    fecha : Date;
+    descripcion: string;
+    medicamentos: string;
+
+}
+
+export interface IMascota {
     nombre: string;
     especie: String;
     raza: string;
+    numeroDocumentoMascota: string;
+    observaciones: IObservaciones[];
+
 }
 
-interface IUsuario extends Document{
+interface IUsuario {
     nombre : string;
     tipoDocumento: string;
     numeroDocumento: string;
@@ -19,10 +29,21 @@ interface IUsuario extends Document{
     createdAt: Date;
     mascotas: IMascota[];
 }
+const observacionesSchema = new Schema<IObservaciones>({
+    fecha: {type: Date, default: Date.now()},
+    descripcion:{},
+    medicamentos:{}
+
+})
+
+
 const mascotaSchema = new Schema<IMascota>({
     nombre:{type:String, required: true},
     especie:{type: String, required: true},
     raza:{type:String, required: true},
+    numeroDocumentoMascota:{type:String},
+    observaciones: [observacionesSchema]
+
 
 
 });

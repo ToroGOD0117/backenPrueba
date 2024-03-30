@@ -12,10 +12,10 @@ router.post("/",validateJWT,[
     check("email", "el email es obligatorio"). not().isEmpty().isEmail(),
     validateFields
 ] ,crearUsuario);
-router.post("/mascotas/:numeroDocumento",agregarMascota)
-router.get("/:numeroDocumento",getUnUsuario);
+router.post("/mascotas/:numeroDocumento",validateJWT,agregarMascota)
+router.get("/:numeroDocumento",validateJWT,getUnUsuario);
 router.put("/:numeroDocumentos",validateJWT,updateUsuario);
 // router.delete("/:id",validateJWT,deleteCliente);
- router.put("/estadoF/:numeroDocumento",actEstadoF);
+ router.put("/estadoF/:numeroDocumento",validateJWT,actEstadoF);
  
 export default router; 
