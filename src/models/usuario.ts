@@ -1,9 +1,9 @@
 import { Document, Types, Model, Schema, model } from "mongoose";
 
-interface IObservaciones{
-    fecha : Date;
-    descripcion: string;
-    medicamentos: string;
+export interface IObservaciones{
+        fecha : Date;
+        descripcion: string;
+        medicamentos: string;
 
 }
 
@@ -29,10 +29,10 @@ interface IUsuario {
     createdAt: Date;
     mascotas: IMascota[];
 }
-const observacionesSchema = new Schema<IObservaciones>({
-    fecha: {type: Date, default: Date.now()},
-    descripcion:{},
-    medicamentos:{}
+export const observacionesSchema = new Schema<IObservaciones>({
+        fecha: {type: Date, default: Date.now()},
+        descripcion:{},
+        medicamentos:{}
 
 })
 

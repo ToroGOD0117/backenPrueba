@@ -71,3 +71,87 @@ export const renewToken = async (req: CustomRequest, res: Response) => {
       });
     }
   };
+
+  //olvido contraseña
+  export const olvidoContrasena = async (req: CustomRequest, res: Response) => {
+    const { login, numeroDocumento } = req.body;
+  
+    try {
+      const existeUsuario = await UsuarioModel.findOne({
+        login,
+        numeroDocumento,
+      });
+  
+      if (!existeUsuario) {
+        res.status(400).json({
+          ok: false,
+          msg: "No coinciden sus credenciales",
+        });
+      }
+  
+      const id = existeUsuario?._id.toString();
+  
+      if (id) {
+        // Generar Token
+        const token = await generarJWT(
+          id,
+          login,
+          "1H",
+          process.env.JWT_SECRET_PASS
+        );
+  
+        res.status(200).json({
+          ok: true,
+          msg: "Proceso éxito",
+          usuario: existeUsuario,
+          token,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({
+        ok: false,
+        msg: "No se logró validar su acceso con éxito, por favor comuniquese con el administrador",
+      });
+    }
+  };
+  
+  export const cambioContrasena = async (req: CustomRequest, res: Response) => {
+    const id = req._id;
+    const { password } = req.body;
+  
+    try {
+      if (!password) {
+        res.status(400).json({
+          ok: false,
+          msg: "Por favor dígite una contraseña válida",
+        });
+      }
+  
+      const newPassword = bcrypt.hashSync(password, 10);
+  
+      const actualizarPassword = await UsuarioModel.findByIdAndUpdate({
+        _id: id,
+        password: newPassword,
+      });
+  
+      if (!actualizarPassword) {
+        res.status(400).json({
+          ok: false,
+          msg: "Error al actualizar la contraseña",
+        });
+      }
+  
+      res.status(200).json({
+        ok: true,
+        msg: "Contraseña actualizada",
+        usuario: actualizarPassword,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({
+        ok: false,
+        msg: "Error al actualizar la contraseña, hable con el administrador",
+      });
+    }
+  };

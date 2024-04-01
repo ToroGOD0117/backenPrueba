@@ -38,12 +38,27 @@ const agregarMascota = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.agregarMascota = agregarMascota;
 const agregarObservacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { numeroDocumentoMascota } = req.params;
+    const { numeroDocumento, numeroDocumentoMascota } = req.params;
     const { body } = req;
     try {
-        const mascota = yield usuario_1.default.findOne({ numeroDocumentoMascota });
+        const usuario = yield usuario_1.default.findOne({ numeroDocumento });
+        if (!usuario) {
+            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        }
+        const mascota = usuario.mascotas.find((m) => m.numeroDocumentoMascota === numeroDocumentoMascota);
+        if (!mascota) {
+            return res.status(404).json({ ok: false, msg: 'Mascota no encontrada' });
+        }
+        // Crear la nueva observación
+        const nuevaObservacion = Object.assign({}, body);
+        mascota.observaciones.push(nuevaObservacion);
+        // Guardar el usuario actualizado en la base de datos
+        yield usuario.save();
+        res.status(201).json({ ok: true, msg: 'Observación agregada correctamente', observacion: nuevaObservacion });
     }
     catch (error) {
+        console.error('Error al agregar la observación:', error);
+        res.status(500).json({ ok: false, msg: 'Error al agregar la observación' });
     }
 });
 exports.agregarObservacion = agregarObservacion;

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { IMascota } from "../models/usuario";
+import {IObservaciones} from "../models/usuario";
 import UsuarioModel from "../models/usuario";
 
 export const agregarMascota = async (req: Request, res: Response) => {
@@ -35,12 +36,33 @@ export const agregarMascota = async (req: Request, res: Response) => {
 };
 
 export const agregarObservacion = async (req: Request, res: Response)=>{
-    const {numeroDocumentoMascota} = req.params;
+    const {numeroDocumento, numeroDocumentoMascota} = req.params;
+
     const { body } = req;
 try {
-    const mascota = await UsuarioModel.findOne({ numeroDocumentoMascota });
+    const usuario = await UsuarioModel.findOne({ numeroDocumento });
+    if (!usuario) {
+        return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+    }
 
+    const mascota = usuario.mascotas.find((m: IMascota) => m.numeroDocumentoMascota === numeroDocumentoMascota);
+    if (!mascota) {
+        return res.status(404).json({ ok: false, msg: 'Mascota no encontrada' });
+    }
+
+    // Crear la nueva observación
+    const nuevaObservacion: IObservaciones = {
+      ...body,
+    };
+
+    mascota.observaciones.push(nuevaObservacion);
+
+    // Guardar el usuario actualizado en la base de datos
+    await usuario.save();
+
+    res.status(201).json({ ok: true, msg: 'Observación agregada correctamente', observacion: nuevaObservacion });
 } catch (error) {
-    
+    console.error('Error al agregar la observación:', error);
+  res.status(500).json({ ok: false, msg: 'Error al agregar la observación' });
 }
 }

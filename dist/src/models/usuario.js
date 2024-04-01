@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.observacionesSchema = void 0;
 const mongoose_1 = require("mongoose");
-const observacionesSchema = new mongoose_1.Schema({
+exports.observacionesSchema = new mongoose_1.Schema({
     fecha: { type: Date, default: Date.now() },
     descripcion: {},
     medicamentos: {}
@@ -11,7 +12,7 @@ const mascotaSchema = new mongoose_1.Schema({
     especie: { type: String, required: true },
     raza: { type: String, required: true },
     numeroDocumentoMascota: { type: String },
-    observaciones: [observacionesSchema]
+    observaciones: [exports.observacionesSchema]
 });
 const UsuarioSchema = new mongoose_1.Schema({
     nombre: {
