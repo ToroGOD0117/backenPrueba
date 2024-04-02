@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.actEstadoF = exports.updateUsuario = exports.getUnUsuario = exports.crearUsuario = exports.agregarMascota = void 0;
+exports.actEstadoF = exports.updateUsuario = exports.getUnUsuario = exports.getUsuarios = exports.crearUsuario = exports.agregarMascota = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 // Crear mascota
@@ -73,6 +73,22 @@ const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.crearUsuario = crearUsuario;
+const getUsuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const usuarios = yield usuario_1.default.find();
+        res.json({
+            ok: true,
+            usuarios,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            ok: false,
+            msg: `Error consultar los usuarios`,
+        });
+    }
+});
+exports.getUsuarios = getUsuarios;
 const getUnUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const numeroDocumento = req.params.numeroDocumento;

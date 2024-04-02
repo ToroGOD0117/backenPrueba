@@ -16,6 +16,7 @@ router.post("/", validate_jwt_1.default, [
     validate_fields_1.validateFields
 ], usuario_controler_1.crearUsuario);
 router.post("/mascotas/:numeroDocumento", validate_jwt_1.default, usuario_controler_1.agregarMascota);
+router.get("/Usuarios", usuario_controler_1.getUsuarios);
 router.get("/:numeroDocumento", validate_jwt_1.default, usuario_controler_1.getUnUsuario);
 router.put("/:numeroDocumentos", validate_jwt_1.default, usuario_controler_1.updateUsuario);
 // router.delete("/:id",validateJWT,deleteCliente);

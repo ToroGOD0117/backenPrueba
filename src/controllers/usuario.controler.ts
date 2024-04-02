@@ -80,7 +80,20 @@ export const crearUsuario = async (req: Request, res: Response)=>{
     });
     }
 }
-
+export const getUsuarios = async (req: Request, res: Response) => {
+    try {
+      const usuarios = await UsuarioModel.find();
+      res.json({
+        ok: true,
+        usuarios,
+      });
+    } catch (error) {
+      res.status(400).json({
+        ok: false,
+        msg: `Error consultar los usuarios`,
+      });
+    }
+  };
 
 
 export const getUnUsuario = async (req: Request, res: Response)=>{

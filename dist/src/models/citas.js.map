@@ -1,1 +1,1 @@
-{"version":3,"file":"citas.js","sourceRoot":"","sources":["../../../src/models/citas.ts"],"names":[],"mappings":";;AAAA,uCAA+D;AAE/D,MAAM,UAAU,GAAG,IAAI,iBAAM,CAAC,EAG7B,CAAC,CAAA"}
+{"version":3,"file":"citas.js","sourceRoot":"","sources":["../../../src/models/citas.ts"],"names":[],"mappings":";;AAAA,uCAA+D;AAE/D,MAAM,UAAU,GAAG,IAAI,iBAAM,CAAC;IAE9B,aAAa,EAAC,EAAE;IAChB,MAAM,EAAC,EAAC,IAAI,EAAC,MAAM,EAAC,OAAO,EAAE,IAAI,EAAE,OAAO,EAAE,YAAY,EAAC;IACzD,KAAK,EAAC,EAAC,IAAI,EAAC,IAAI,EAAC;CAEhB,CAAC,CAAC"}
