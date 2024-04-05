@@ -1,9 +1,17 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-const citaSchema = new mongoose_1.Schema({
-    fechaCreacion: {},
-    estado: { type: String, require: true, default: "disponible" },
-    fecha: { type: Date }
-});
+// import { Document, Model, Schema, Types, model}from "mongoose";
+// export interface ICitas{
+//     fechaCreacion : Date;
+//     estado: string;
+//     fecha:Date;
+//     duracion: string;
+// }
+// export const citasSchema = new Schema<ICitas>({
+//     fechaCreacion:{type:Date, default: Date.now()},
+//     estado:{type:String,require: true, default: "disponible"},
+//     fecha:{type:Date},
+//     duracion:{type:String}
+// })
+// const CitaModel: Model<ICitas> = model<ICitas>("usuario", citasSchema);
+// export default CitaModel;
 //# sourceMappingURL=citas.js.map

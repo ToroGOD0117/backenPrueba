@@ -12,54 +12,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.agregarObservacion = exports.agregarMascota = void 0;
+exports.agregarMascota = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
+const mascota_1 = __importDefault(require("../models/mascota"));
 const agregarMascota = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { numeroDocumento } = req.params;
-    const { body } = req;
     try {
+        const { numeroDocumentoUsuario, nombre, especie, raza } = req.body;
         // Buscar al usuario por su número de documento
-        const usuario = yield usuario_1.default.findOne({ numeroDocumento });
-        if (!usuario) {
-            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        const existingUser = yield usuario_1.default.findOne({ numeroDocumento: numeroDocumentoUsuario });
+        if (!existingUser) {
+            return res.status(404).json({ message: 'No se encontró un usuario con ese número de documento' });
         }
-        // Generar un número de documento único para la nueva mascota
-        const numeroDocumentoMascota = `${numeroDocumento}-${usuario.mascotas.length + 1}`;
+        // Contar cuántas mascotas tiene el usuario
+        const mascotaUsuario = yield mascota_1.default.countDocuments({ numeroDocumentoUsuario });
+        // Generar el número de documento único para la nueva mascota
+        const numeroDocumentoMascota = `${numeroDocumentoUsuario}-${mascotaUsuario + 1}`;
         // Crear la nueva mascota
-        const nuevaMascota = Object.assign(Object.assign({}, body), { numeroDocumentoMascota: numeroDocumentoMascota });
-        usuario.mascotas.push(nuevaMascota);
-        yield usuario.save();
-        res.status(201).json({ ok: true, msg: 'Mascota creada correctamente', mascota: nuevaMascota });
+        const nuevaMascota = new mascota_1.default({
+            numeroDocumentoUsuario,
+            nombre,
+            especie,
+            raza,
+            numeroDocumentoMascota
+        });
+        // Guardar la mascota en la base de datos
+        const mascotaCreada = yield nuevaMascota.save();
+        res.status(200).json({
+            ok: true,
+            msg: "Mascota creada",
+            mascotaCreada
+        });
     }
     catch (error) {
-        console.error('Error al agregar la mascota:', error);
-        res.status(500).json({ ok: false, msg: 'Error al agregar la mascota' });
+        console.error("Error al crear la mascota:", error);
+        res.status(400).json({
+            ok: false,
+            error: "Error al crear la mascota",
+        });
     }
 });
 exports.agregarMascota = agregarMascota;
-const agregarObservacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { numeroDocumento, numeroDocumentoMascota } = req.params;
-    const { body } = req;
-    try {
-        const usuario = yield usuario_1.default.findOne({ numeroDocumento });
-        if (!usuario) {
-            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
-        }
-        const mascota = usuario.mascotas.find((m) => m.numeroDocumentoMascota === numeroDocumentoMascota);
-        if (!mascota) {
-            return res.status(404).json({ ok: false, msg: 'Mascota no encontrada' });
-        }
-        // Crear la nueva observación
-        const nuevaObservacion = Object.assign({}, body);
-        mascota.observaciones.push(nuevaObservacion);
-        // Guardar el usuario actualizado en la base de datos
-        yield usuario.save();
-        res.status(201).json({ ok: true, msg: 'Observación agregada correctamente', observacion: nuevaObservacion });
-    }
-    catch (error) {
-        console.error('Error al agregar la observación:', error);
-        res.status(500).json({ ok: false, msg: 'Error al agregar la observación' });
-    }
-});
-exports.agregarObservacion = agregarObservacion;
 //# sourceMappingURL=mascota.controler.js.map

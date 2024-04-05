@@ -1,20 +1,6 @@
 import { Document, Types, Model, Schema, model } from "mongoose";
 
-export interface IObservaciones{
-        fecha : Date;
-        descripcion: string;
-        medicamentos: string;
 
-}
-
-export interface IMascota {
-    nombre: string;
-    especie: String;
-    raza: string;
-    numeroDocumentoMascota: string;
-    observaciones: IObservaciones[];
-
-}
 
 interface IUsuario {
     nombre : string;
@@ -27,26 +13,13 @@ interface IUsuario {
     telefono: string;
     estado: boolean;
     createdAt: Date;
-    mascotas: IMascota[];
+   
 }
-export const observacionesSchema = new Schema<IObservaciones>({
-        fecha: {type: Date, default: Date.now()},
-        descripcion:{},
-        medicamentos:{}
-
-})
-
-
-const mascotaSchema = new Schema<IMascota>({
-    nombre:{type:String, required: true},
-    especie:{type: String, required: true},
-    raza:{type:String, required: true},
-    numeroDocumentoMascota:{type:String},
-    observaciones: [observacionesSchema]
 
 
 
-});
+
+
 const UsuarioSchema = new Schema<IUsuario>({
     nombre:{
         type:String,
@@ -95,10 +68,7 @@ const UsuarioSchema = new Schema<IUsuario>({
     createdAt:{
         type:Date,
         default: Date.now()
-    },
-    mascotas: [mascotaSchema]
-    
-
+    }
 });
 
 const UsuarioModel: Model<IUsuario> = model<IUsuario>("usuario", UsuarioSchema);

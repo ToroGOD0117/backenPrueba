@@ -1,6 +1,6 @@
 // path/api/v1/usuario
 import  { Router } from "express";
-import { crearUsuario, getUnUsuario, updateUsuario, actEstadoF,agregarMascota, getUsuarios } from "../controllers/usuario.controler";
+import { crearUsuario, getUnUsuario, updateUsuario, actEstadoF, getUsuarios } from "../controllers/usuario.controler";
 import { check } from "express-validator";
 import { validateFields } from "../middleware/validate-fields";
 import validateJWT from "../middleware/validate-jwt";

@@ -34,7 +34,7 @@ class Server {
     }
     listen() {
         this.app.listen(this.port, () => {
-            console.log("el servidor se esta corriendo en:", this.port);
+            console.log("el servidor  esta corriendo en:", this.port);
         });
     }
 }

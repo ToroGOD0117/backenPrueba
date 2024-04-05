@@ -1,96 +1,70 @@
 import { Request, Response } from "express";
-import { IMascota } from "../models/usuario";
-import {IObservaciones} from "../models/usuario";
 import UsuarioModel from "../models/usuario";
+import MascotaModel from "../models/mascota";
 
 export const agregarMascota = async (req: Request, res: Response) => {
-    const { numeroDocumento } = req.params;
-    const { body } = req;
-
     try {
-        // Buscar al usuario por su número de documento
-        const usuario = await UsuarioModel.findOne({ numeroDocumento });
+        const { numeroDocumentoUsuario, nombre, especie, raza } = req.body;
         
-        if (!usuario) {
-            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        // Buscar al usuario por su número de documento
+        const existingUser = await UsuarioModel.findOne({ numeroDocumento: numeroDocumentoUsuario });
+        if (!existingUser) {
+            return res.status(404).json({ message: 'No se encontró un usuario con ese número de documento' });
         }
 
-        // Generar un número de documento único para la nueva mascota
-        const numeroDocumentoMascota = `${numeroDocumento}-${usuario.mascotas.length + 1}`;
+        // Contar cuántas mascotas tiene el usuario
+        const mascotaUsuario = await MascotaModel.countDocuments({ numeroDocumentoUsuario } );
+
+        // Generar el número de documento único para la nueva mascota
+        const numeroDocumentoMascota = `${numeroDocumentoUsuario}-${mascotaUsuario + 1}`;
 
         // Crear la nueva mascota
-        const nuevaMascota : IMascota = {
-           ...body,
-           numeroDocumentoMascota: numeroDocumentoMascota,
-           
-        };
+        const nuevaMascota = new MascotaModel({
+            numeroDocumentoUsuario,
+            nombre,
+            especie,
+            raza,
+            numeroDocumentoMascota
+        });
+        
+        // Guardar la mascota en la base de datos
+        const mascotaCreada = await nuevaMascota.save();
 
-        usuario.mascotas.push(nuevaMascota);
-        await usuario.save();
-
-        res.status(201).json({ ok: true, msg: 'Mascota creada correctamente', mascota: nuevaMascota });
+        res.status(200).json({
+            ok: true,
+            msg: "Mascota creada",
+            mascotaCreada
+        });
     } catch (error) {
-        console.error('Error al agregar la mascota:', error);
-        res.status(500).json({ ok: false, msg: 'Error al agregar la mascota' });
+        console.error("Error al crear la mascota:", error);
+        res.status(400).json({
+            ok: false,
+            error: "Error al crear la mascota",
+        });
     }
 };
 
-export const agregarObservacion = async (req: Request, res: Response)=>{
-    const {numeroDocumento, numeroDocumentoMascota} = req.params;
 
-    const { body } = req;
-try {
-    const usuario = await UsuarioModel.findOne({ numeroDocumento });
-    if (!usuario) {
-        return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
-    }
-
-    const mascota = usuario.mascotas.find((m: IMascota) => m.numeroDocumentoMascota === numeroDocumentoMascota);
-    if (!mascota) {
-        return res.status(404).json({ ok: false, msg: 'Mascota no encontrada' });
-    }
-
-    // Crear la nueva observación
-    const nuevaObservacion: IObservaciones = {
-      ...body,
-    };
-
-    mascota.observaciones.push(nuevaObservacion);
-
-    // Guardar el usuario actualizado en la base de datos
-    await usuario.save();
-
-    res.status(201).json({ ok: true, msg: 'Observación agregada correctamente', observacion: nuevaObservacion });
-} catch (error) {
-    console.error('Error al agregar la observación:', error);
-  res.status(500).json({ ok: false, msg: 'Error al agregar la observación' });
-}
-}
-
-
-// Obtener observaciones de una mascota
-export const obtenerObservaciones = async (req: Request, res: Response) => {
-    const { numeroDocumento, numeroDocumentoMascota } = req.params;
-
+export const getMascotasPorUsuario = async (req: Request, res: Response) => {
     try {
-        // Buscar al usuario por su número de documento
-        const usuario = await UsuarioModel.findOne({ numeroDocumento });
-        
-        if (!usuario) {
-            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        const { numeroDocumentoUsuario } = req.params;
+
+        // Buscar las mascotas del usuario por su número de documento
+        const mascotas = await MascotaModel.find({ numeroDocumentoUsuario });
+
+        if (mascotas.length === 0) {
+            return res.status(404).json({ message: 'El usuario no tiene mascotas registradas.' });
         }
 
-        // Encontrar la mascota por su número de documento
-        const mascota = usuario.mascotas.find((m: IMascota) => m.numeroDocumentoMascota === numeroDocumentoMascota);
-
-        if (!mascota) {
-            return res.status(404).json({ ok: false, msg: 'Mascota no encontrada' });
-        }
-
-        // Devolver las observaciones de la mascota
-        res.status(200).json({ ok: true, msg: 'Observaciones encontradas', observaciones: mascota.observaciones });
+        res.status(200).json({
+            ok: true,
+            mascotas
+        });
     } catch (error) {
-        console.error('Error al obtener las observaciones:', error);
-        res.status(500).json({ ok: false, msg: 'Error al obtener las observaciones' });
+        console.error("Error al obtener las mascotas del usuario:", error);
+        res.status(400).json({
+            ok: false,
+            error: "Error al obtener las mascotas del usuario",
+        });
     }
 };
