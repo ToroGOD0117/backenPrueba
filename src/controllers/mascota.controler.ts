@@ -66,3 +66,31 @@ try {
   res.status(500).json({ ok: false, msg: 'Error al agregar la observación' });
 }
 }
+
+
+// Obtener observaciones de una mascota
+export const obtenerObservaciones = async (req: Request, res: Response) => {
+    const { numeroDocumento, numeroDocumentoMascota } = req.params;
+
+    try {
+        // Buscar al usuario por su número de documento
+        const usuario = await UsuarioModel.findOne({ numeroDocumento });
+        
+        if (!usuario) {
+            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        }
+
+        // Encontrar la mascota por su número de documento
+        const mascota = usuario.mascotas.find((m: IMascota) => m.numeroDocumentoMascota === numeroDocumentoMascota);
+
+        if (!mascota) {
+            return res.status(404).json({ ok: false, msg: 'Mascota no encontrada' });
+        }
+
+        // Devolver las observaciones de la mascota
+        res.status(200).json({ ok: true, msg: 'Observaciones encontradas', observaciones: mascota.observaciones });
+    } catch (error) {
+        console.error('Error al obtener las observaciones:', error);
+        res.status(500).json({ ok: false, msg: 'Error al obtener las observaciones' });
+    }
+};

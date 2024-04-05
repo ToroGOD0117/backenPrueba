@@ -6,20 +6,28 @@ import { validateFields } from "../middleware/validate-fields";
 import validateJWT from "../middleware/validate-jwt";
 
 const router = Router();
-
+//Crear Usuarios
 router.post("/",validateJWT,[
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("email", "el email es obligatorio"). not().isEmpty().isEmail(),
+    check("tipoDocumento", "el documento es obligatorio").not(). isEmpty(),
+    check("telefono", "el telefono es obligatorio"). not().isEmpty(),
+    check("login", "el login es obligatorio"). not().isEmpty(),
+    check("numeroDocumento", "el numero de documento es obligatorio").not().isEmpty(),
+    check("password", "el numero de documento es obligatorio").not().isEmpty(),
     validateFields
 ] ,crearUsuario);
-router.post("/mascotas/:numeroDocumento",validateJWT,agregarMascota);
 
+//Buscar Usuarios
 router.get("/Usuarios",getUsuarios);
+
+//Buscar un solo usuario
 router.get("/:numeroDocumento",validateJWT,getUnUsuario);
 
-router.put("/:numeroDocumentos",validateJWT,updateUsuario);
+//Actualizar Usuarios
+router.put("/:numeroDocumento",validateJWT,updateUsuario);
 
-// router.delete("/:id",validateJWT,deleteCliente);
+//Actualizar el estado a false o inactivo de un usuario
  router.put("/estadoF/:numeroDocumento",validateJWT,actEstadoF);
  
 export default router; 
