@@ -18,9 +18,7 @@ const mascotaSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
-    numeroDocumentMascota: {
-        type: String,
-    }
+    usuario: { type: mongoose_1.Schema.Types.ObjectId, ref: "usuario", required: true }
 });
 const MascotaModel = (0, mongoose_1.model)("mascota", mascotaSchema);
 exports.default = MascotaModel;

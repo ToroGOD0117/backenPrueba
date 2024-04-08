@@ -1,8 +1,13 @@
 import { Request, Response } from "express";
 import UsuarioModel from "../models/usuario";
 import MascotaModel from "../models/mascota";
+import { CustomRequest} from "../middleware/validate-jwt";
 
-export const agregarMascota = async (req: Request, res: Response) => {
+export const agregarMascota = async (req: CustomRequest, res: Response) => {
+    //   const productoNuevo = new MascotaModel({ usuario: id, ...body });
+
+    const id = req._id;
+  
     try {
         const { numeroDocumentoUsuario, nombre, especie, raza } = req.body;
         
@@ -24,7 +29,8 @@ export const agregarMascota = async (req: Request, res: Response) => {
             nombre,
             especie,
             raza,
-            numeroDocumentoMascota
+            numeroDocumentoMascota,
+            usuario: id
         });
         
         // Guardar la mascota en la base de datos
@@ -36,13 +42,14 @@ export const agregarMascota = async (req: Request, res: Response) => {
             mascotaCreada
         });
     } catch (error) {
-        console.error("Error al crear la mascota:", error);
-        res.status(400).json({
-            ok: false,
-            error: "Error al crear la mascota",
-        });
+      console.log(error);
+      res.status(400).json({
+        ok: false,
+        msg: `Error al crear mascota`,
+      });
     }
-};
+  };
+  
 
 
 export const getMascotasPorUsuario = async (req: Request, res: Response) => {

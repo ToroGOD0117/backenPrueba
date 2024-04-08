@@ -12,10 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.agregarMascota = void 0;
+exports.getMascotasPorUsuario = exports.agregarMascota = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const mascota_1 = __importDefault(require("../models/mascota"));
 const agregarMascota = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //   const productoNuevo = new MascotaModel({ usuario: id, ...body });
+    const id = req._id;
     try {
         const { numeroDocumentoUsuario, nombre, especie, raza } = req.body;
         // Buscar al usuario por su número de documento
@@ -33,7 +35,8 @@ const agregarMascota = (req, res) => __awaiter(void 0, void 0, void 0, function*
             nombre,
             especie,
             raza,
-            numeroDocumentoMascota
+            numeroDocumentoMascota,
+            usuario: id
         });
         // Guardar la mascota en la base de datos
         const mascotaCreada = yield nuevaMascota.save();
@@ -44,12 +47,34 @@ const agregarMascota = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        console.error("Error al crear la mascota:", error);
+        console.log(error);
         res.status(400).json({
             ok: false,
-            error: "Error al crear la mascota",
+            msg: `Error al crear mascota`,
         });
     }
 });
 exports.agregarMascota = agregarMascota;
+const getMascotasPorUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { numeroDocumentoUsuario } = req.params;
+        // Buscar las mascotas del usuario por su número de documento
+        const mascotas = yield mascota_1.default.find({ numeroDocumentoUsuario });
+        if (mascotas.length === 0) {
+            return res.status(404).json({ message: 'El usuario no tiene mascotas registradas.' });
+        }
+        res.status(200).json({
+            ok: true,
+            mascotas
+        });
+    }
+    catch (error) {
+        console.error("Error al obtener las mascotas del usuario:", error);
+        res.status(400).json({
+            ok: false,
+            error: "Error al obtener las mascotas del usuario",
+        });
+    }
+});
+exports.getMascotasPorUsuario = getMascotasPorUsuario;
 //# sourceMappingURL=mascota.controler.js.map

@@ -1,4 +1,5 @@
-import { Model, Schema, model } from "mongoose";
+import { Model, Schema, Types, model } from "mongoose";
+
 
 const mascotaSchema = new Schema({
   numeroDocumentoUsuario: {
@@ -17,10 +18,7 @@ const mascotaSchema = new Schema({
     type: String,
     required:true 
     },
-numeroDocumentMascota:{
-    type: String,
-    
-}
+usuario: {type: Schema.Types.ObjectId, ref: "usuario",required: true}
 });
 
 

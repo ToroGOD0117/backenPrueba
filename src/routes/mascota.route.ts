@@ -7,7 +7,7 @@ import { check } from "express-validator";
 
 const router = Router();
 
-router.post("/crearMascota",[
+router.post("/crearMascota",validateJWT,[
     check("nombre", "El nombre de la mascota es obligatorio").not().isEmpty(),
     check("especie", "La especie de la mascota es obligatoria").not().isEmpty(),
     check("raza", "La raza de la mascota es obligatoria").not().isEmpty(),
